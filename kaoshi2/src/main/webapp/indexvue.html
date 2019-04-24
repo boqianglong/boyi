@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue/vue-2.2.2-min.js"></script>
+    <script src="jquery/jquery-2.1.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<table id="userTable">
+    <tr>
+        <input type="button" onclick="window.location.href='insert.html'" value="新增"/>
+    </tr>
+    <br>
+    <tr id="dataTable">
+        <input type="text" name="message" placeholder="请输入查询条件"/>
+        <button onclick="select()"> 查询</button>
+
+    </tr>
+    <tr>
+        <td>编号</td>
+        <td>商品title</td>
+        <td>物品名称</td>
+        <td> 市场价</td>
+        <td > 销售价格</td>
+        <td> 库存数量</td>
+        <td> 商品描述</td>
+        <td> 状态</td>
+        <td> 热购</td>
+        <td>操作</td>
+    </tr>
+    <tr v-for="user in users" :key="user.id">
+        <td>{{user.id}}</td>
+        <td>{{user.goodsTitle}}</td>
+        <td>{{user.goodsName}}</td>
+        <td>{{user.basePrice}}</td>
+        <td>{{user.price}}</td>
+        <td>{{user.costPrice}}</td>
+        <td>{{user.stockNum}}</td>
+        <td>{{user.goodsDesc}}</td>
+        <td>{{user.status}}</td>
+        <td>{{user.goodsHot}}</td>
+        <td>
+
+            <input type="button" @click.prevent="update(user.id)"  value="修改"/>
+            <input type="button" @click.prevent="del(user.id)" value="删除"/>
+
+        </td>
+    </tr>
+    <tr>
+        <td colspan="5">
+            <button @click="removeAll">
+                清空数据
+            </button>
+        </td>
+    </tr>
+</table>
+<script>
+    new Vue ({
+        el:"#userTable",
+        data:{users:[]},
+        created:function () {
+            var self=this;
+            $.ajax({
+                url:"getAllUserInfo",
+                type:"post",
+                dataType:"json"
+            }).then(function (responseValue) {
+                self.users = responseValue;
+                console.log(self.users);
+            }).fail(function () {
+                console.error("查询失败");
+            })
+        },
+        methods:{
+            removeAll:function(){
+                this.users = [];
+            },
+            // select: function () {
+            //     var like = this;
+            //
+            //     var goodsTitle = $("#message").val();
+            //     var goodsName = $("#message").val();
+            //     var basePrice = $("#message").val();
+            //     var price = $("#message").val();
+            //     var costPrice = $("#message").val();
+            //     var stockNum = $("#message").val();
+            //     var goodsDesc = $("#message").val();
+            //     var status = $("#message").val();
+            //     var goodsHot = $("#message").val();
+            //     if (username == null || username == "" && password == null || password == "" && state == null || state == "" && idCard == null || idCard == "") {
+            //         alert("查询不能为空")
+            //         window.location.href = "indexvue.html";
+            //     } else {
+            //         $.ajax({
+            //             url:"likeUserInfo",
+            //             type: 'post',
+            //             contentType: "application/json",
+            //             data: JSON.stringify({"username": username, "password": password, "state": state,"idCard":idCard}),
+            //             dataType: 'json'
+            //         }).then(function (rvalue) {
+            //             like.users = rvalue;
+            //             console.log(like.users)
+            //         }).fail(function () {
+            //             console.error("查询失败")
+            //         })
+            //     }
+            // }
+        }
+    })
+    function del(id) {
+        if (confirm("确认要删除吗？")) {
+            window.event.returnValue = true;
+        } else {
+            window.event.returnValue = false;
+        }
+        if (window.event.returnValue == true) {
+            $.ajax({
+                type: "GET",
+                url: 'delUserInfo?id='+id,
+                async: false,
+                dataType: 'json',
+
+                error: function (data) {
+                    window.location.href="indexvue.html"
+                    alert("删除成功！！！")
+                }
+
+            });
+        }
+    }
+    function update(id) {
+        window.location.href = "edit.html?id="+id;
+    }
+    function select(){
+        $("tr td").html("");
+        var  message= $("input[name='message']").val()
+
+
+        $.ajax({
+            type:"get",
+            url:'likeUserInfo',
+            data:{"message":message},
+            async: false,
+            contentType:"application/json; charset=utf-8",
+            success:function (data) {
+
+                $.each(data,function (index,element) {
+
+                    var trStr = "<tr>"+
+                        "<td>"+element.id+"</td>"+
+                        "<td>"+element.goodsTitle+"</td>"+
+                        "<td>"+element.goodsName+"</td>"+
+                        "<td>"+element.basePrice+"</td>"+
+                        "<td>"+element.price+"</td>"+
+                        "<td>"+element.costPrice+"</td>"+
+                        "<td>"+element.stockNum+"</td>"+
+                        "<td>"+element.goodsDesc+"</td>"+
+                        "<td>"+element.status+"</td>"+
+                        "<td>"+element.goodsHot+"</td>"+
+
+                    //     var goodsName = $("#message").val();
+                    //     var basePrice = $("#message").val();
+                    //     var price = $("#message").val();
+                    //     var costPrice = $("#message").val();
+                    //     var stockNum = $("#message").val();
+                    //     var goodsDesc = $("#message").val();
+                    //     var status = $("#message").val();
+                    //     var goodsHot = $("#message").val();
+
+                        "</tr>";
+                    $("#dataTable").append(trStr);
+
+                });
+
+            }
+        });
+    }
+</script>
+</body>
+</html>

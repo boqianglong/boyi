@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>用户注册</h2>
+<form role="form">
+    <div class="form-group">
+        <label >登陆账号</label>
+        <input type="text" class="form-control" name="username" placeholder="请输入登陆账号">
+    </div>
+    <div class="form-group">
+        <label >用户密码</label>
+        <input type="text" class="form-control" name="password" placeholder="请输入用户密码">
+    </div>
+    <div class="form-group">
+        <label >类型</label>
+        <input type="text" class="form-control" name="state" placeholder="请输入角色名称">
+    </div>
+    <div class="form-group">
+        <label >身份证号码</label>
+        <input type="email" class="form-control"name="idCard" placeholder="请输入身份证号码">
+
+    </div>
+    <button type="button" class="btn btn-success"  onclick="reg()"><i class="glyphicon glyphicon-plus">注册</i> </button>
+    <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-refresh">重置</i> </button>
+</form>
+
+<script src="jquery/jquery-2.1.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="script/docs.min.js"></script>
+
+
+<script>
+    function reg() {
+        var userInfo={
+         username: $("input[name='username']").val(),
+         password: $("input[name='password']").val(),
+         state:$("input[name='state']").val(),
+         idCard: $("input[name='idCard']").val()
+        };
+        $.ajax({
+
+            url:"register",
+            type:"POST",
+            data:JSON.stringify(userInfo),
+            async: false,
+            contentType:"application/json; charset=utf-8",
+            success:function (Data) {
+
+                if ( Data == true ){
+                    window.location.href = "login.html";
+                } else {
+                    alert("不能为空");
+                    //window.location.href = "member.html";
+                }
+            }
+        });
+
+
+    }
+
+</script>
+</body>
+</html>

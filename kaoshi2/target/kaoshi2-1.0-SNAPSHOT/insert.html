@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="vue/vue-2.2.2-min.js"></script>
+    <script src="jquery/jquery-2.1.1.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<form>
+    <div>
+        <label>商品title：</label>
+        <input type="text" name="goodsTitle"/>
+    </div>
+    <div>
+        <label>物品名称：</label>
+        <input type="text" name="goodsName"/>
+    </div>
+    <div>
+        <label>市场价：</label>
+        <input type="text" name="basePrice"/>
+    </div>
+    <div>
+        <label>销售价格：</label>
+        <input type="text" name="price"/>
+
+    </div>
+    <div>
+        <label>库存数量：</label>
+        <input type="text" name="costPrice"/>
+
+    </div>
+    <div>
+        <label>销售价格：</label>
+        <input type="text" name="stockNum"/>
+
+    </div>
+    <div>
+        <label>商品描述：</label>
+        <input type="text" name="goodsDesc"/>
+
+    </div>
+    <div>
+        <label>状态：</label>
+        <input type="text" name="status"/>
+
+    </div>
+    <div>
+        <label>热购：</label>
+        <input type="text" name="goodsHot"/>
+
+    </div>
+
+    <button type="button" onclick="add()">新增</button>
+    <button type="button">重置</button>
+</form>
+<script>
+    function add() {
+        var userInfo={
+            goodsTitle: $("input[name='goodsTitle']").val(),
+            goodsName: $("input[name='goodsName']").val(),
+            basePrice:$("input[name='basePrice']").val(),
+            price:$("input[name='price']").val(),
+            costPrice:$("input[name='costPrice']").val(),
+            stockNum:$("input[name='stockNum']").val(),
+            goodsDesc:$("input[name='goodsDesc']").val(),
+            status:$("input[name='status']").val(),
+            goodsHot:$("input[name='goodsHot']").val()
+
+        };
+        $.ajax({
+
+            url:"insertUserInfo",
+            type:"POST",
+            data:JSON.stringify(userInfo),
+            async: false,
+            contentType:"application/json; charset=utf-8",
+            success:function (Data) {
+
+                if ( Data == true ){
+                    alert("新增成功！！！")
+                    window.location.href = "indexvue.html";
+                } else {
+                    alert("不能为空");
+                    //window.location.href = "member.html";
+                }
+            }
+        });
+
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    <h2>用户登录</h2>
+    <div>
+        <input type="text" name="username" placeholder="请输入用户名">
+    </div>
+    <div>
+        <input type="text" name="password" placeholder="请输入密码">
+    </div>
+    <label>
+        <a href="reg.html">我要注册</a>
+    </label>
+    <button type="button" onclick="login()" >登录</button>
+</form>
+
+<script src="jquery/jquery-2.1.1.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script>
+    function login() {
+
+        var username = $("input[name='username']").val();
+        var password = $("input[name='password']").val();
+
+
+        $.ajax({
+            type: "get",
+            url: "checkLogin?username=" + username + "&password=" + password,
+            async: false,
+            ContentType: "application/json; charset=utf-8",
+            success: function (reponseText) {
+
+                if (reponseText == true) {
+                    window.location.href = "indexvue.html";
+                } else {
+                    alert("账号或密码错误！！！")
+                    //window.location.href = "member.html";
+                }
+            }
+        });
+    }
+</script>
+</body>
+</html>

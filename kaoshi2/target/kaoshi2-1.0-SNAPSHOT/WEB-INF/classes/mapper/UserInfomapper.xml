@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.mapper.UserInfoMapper">
+    <resultMap id="UserMap" type="com.qf.pojo.UserInfo">
+        <id column="ID" property="id"></id>
+        <result column="GOODSTITLE" property="goodsTitle"></result>
+        <result column="GOODSNAME" property="goodsName"></result>
+        <result column="BASEPRICE" property="basePrice"></result>
+        <result column="PRICE" property="price"></result>
+        <result column="COSTPRICE" property="costPrice"></result>
+        <result column="STOCKNUM" property="stockNum"></result>
+        <result column="GOODSDESC" property="goodsDesc"></result>
+        <result column="STATUS" property="status"></result>
+        <result column="GOODSHOT" property="goodsHot"></result>
+    </resultMap>
+
+    <select id="checkUserInfo" resultMap="UserMap" resultType="com.qf.pojo.UserInfo">
+         SELECT * FROM user_info
+    </select>
+    <select id="selectUserInfo" parameterType="com.qf.pojo.UserInfo"  resultType="com.qf.pojo.UserInfo">
+         SELECT * FROM user_info
+    </select>
+    <insert id="insertUserInfo" parameterType="com.qf.pojo.UserInfo" >
+         insert into user_info values (USER_PK.nextval,#{goodsTitle,jdbcType=VARCHAR},#{goodsName,jdbcType=VARCHAR},#{basePrice,jdbcType=INTEGER},#{price,jdbcType=INTEGER},
+         #{costPrice,jdbcType=INTEGER},#{stockNum,jdbcType=INTEGER},#{goodsDesc,jdbcType=VARCHAR},
+         #{status,jdbcType=VARCHAR},#{goodsHot,jdbcType=INTEGER})
+    </insert>
+    <insert id="regUserInfoVo" parameterType="com.qf.vo.UserInfoVo" >
+         insert into user_info values (USER_PK.nextval,#{username,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{state,jdbcType=VARCHAR},#{idCard,jdbcType=VARCHAR})
+    </insert>
+    <delete id="deleteUserInfo" parameterType="int">
+        delete from user_info where id=#{id}
+    </delete>
+    <select id="selectOneUserInfo" resultMap="UserMap" resultType="com.qf.pojo.UserInfo">
+        select * from user_info where id=#{id}
+    </select>
+    <update id = "updateUserInfo" parameterType="com.qf.pojo.UserInfo">
+        update user_info
+        <set>
+            <if test="goodsTitle != null and goodsTitle !=''">
+                goodsTitle = #{goodsTitle},
+            </if>
+            <if test="goodsName != null and goodsName !=''">
+                goodsName = #{goodsName},
+            </if>
+            <if test="basePrice != null and basePrice !=''">
+                basePrice = #{basePrice},
+            </if>
+            <if test="price != null and price !=''">
+                price = #{price},
+            </if>
+            <if test="costPrice != null and costPrice !=''">
+                costPrice = #{costPrice},
+            </if>
+            <if test="stockNum != null and stockNum !=''">
+                stockNum = #{stockNum},
+            </if>
+            <if test="goodsDesc != null and goodsDesc !=''">
+                goodsDesc = #{goodsDesc},
+            </if>
+            <if test="status != null and status !=''">
+                status = #{status},
+            </if>
+            <if test="price != null and price !=''">
+                goodsHot = #{goodsHot}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="selectLikeUserInfo" resultMap="UserMap" parameterType="com.qf.pojo.UserInfo">
+        select * from user_info
+        <where>
+            goodsTitle like concat(concat('%',#{message}),'%')
+            OR goodsName like concat(concat('%',#{message}),'%')
+            OR basePrice like concat(concat('%',#{message}),'%')
+            OR price like concat(concat('%',#{message}),'%')
+            OR costPrice like concat(concat('%',#{message}),'%')
+            OR stockNum like concat(concat('%',#{message}),'%')
+            OR goodsDesc like concat(concat('%',#{message}),'%')
+            OR status like concat(concat('%',#{message}),'%')
+            OR goodsHot like concat(concat('%',#{message}),'%')
+        </where>
+
+    </select>
+    <select id="selectUserInfoBy" parameterType="com.qf.pojo.UserInfo" resultType="com.qf.pojo.UserInfo">
+        select * from user_info where 1=1
+
+        <if test="username!=null">
+            and username=#{username,jdbcType=VARCHAR}
+        </if>
+        <if test="password!=null">
+            and password=#{password,jdbcType=VARCHAR}
+        </if>
+        <if test="state!=null">
+            and state=#{state,jdbcType=VARCHAR}
+        </if>
+        <if test="idCard!=null">
+            and idCard=#{idCard,jdbcType=VARCHAR}
+        </if>
+    </select>
+</mapper>
